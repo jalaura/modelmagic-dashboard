@@ -1,0 +1,8 @@
+{
+  "name": "ModelMagic Dashboard",
+  "description": "A production-ready client dashboard for AI model photography services, featuring project management, asset reviews, and intake wizards.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
