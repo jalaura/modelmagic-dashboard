@@ -1,4 +1,3 @@
-
 import { User, UserRole } from './types';
 
 // Mock User Database
@@ -51,39 +50,64 @@ const MOCK_USERS: Record<string, User> = {
 
 const TOKEN_KEY = 'modelmagic_auth_token';
 const USER_KEY = 'modelmagic_user_data';
+const API_BASE_URL = 'https://modelmagic-api.cmsdossier.workers.dev';
 
 export const AuthService = {
   sendMagicLink: async (email: string): Promise<boolean> => {
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(`Magic link sent to ${email}`);
-        resolve(true);
-      }, 1500);
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/request-magic-link`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send magic link');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error sending magic link:', error);
+      throw error;
+    }
   },
 
   verifyMagicLink: async (email: string): Promise<User | null> => {
-    // Simulate verification
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const user = MOCK_USERS[email.toLowerCase()];
-        if (user) {
-          // Create mock session
-          localStorage.setItem(TOKEN_KEY, 'mock-jwt-token-' + Date.now());
-          localStorage.setItem(USER_KEY, JSON.stringify(user));
-          resolve(user);
-        } else {
-          reject(new Error('User not found'));
-        }
-      }, 1000);
-    });
+    // Extract token from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (!token) {
+      throw new Error('No token provided');
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify-token?token=${token}`);
+
+      if (!response.ok) {
+        throw new Error('Invalid or expired token');
+      }
+
+      const data = await response.json();
+      const user = data.user;
+
+      // Create mock session
+      localStorage.setItem(TOKEN_KEY, 'mock-jwt-token-' + Date.now());
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+
+      return user;
+    } catch (error) {
+      console.error('Error verifying magic link:', error);
+      throw error;
+    }
   },
 
   getCurrentUser: (): User | null => {
     const token = localStorage.getItem(TOKEN_KEY);
     const userData = localStorage.getItem(USER_KEY);
-    
+
     if (token && userData) {
       try {
         return JSON.parse(userData);
@@ -91,22 +115,8 @@ export const AuthService = {
         return null;
       }
     }
+
     return null;
-  },
-
-  logout: () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    // Also clear role preference
-    localStorage.removeItem('modelmagic_user_role');
-  },
-
-  getAllUsers: async (): Promise<User[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(Object.values(MOCK_USERS));
-      }, 500);
-    });
   },
 
   addUser: async (userData: any): Promise<User> => {
@@ -114,15 +124,15 @@ export const AuthService = {
       setTimeout(() => {
         const id = 'u' + Date.now();
         const newUser: User = {
-            id,
-            name: userData.name,
-            email: userData.email,
-            company: userData.company || '',
-            role: userData.role || 'client',
-            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`,
-            plan: 'Free',
-            status: 'active',
-            lastLogin: undefined
+          id,
+          name: userData.name,
+          email: userData.email,
+          company: userData.company || '',
+          role: userData.role || 'client',
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`,
+          plan: 'Free',
+          status: 'active',
+          lastLogin: undefined
         };
         MOCK_USERS[userData.email.toLowerCase()] = newUser;
         resolve(newUser);
@@ -131,16 +141,21 @@ export const AuthService = {
   },
 
   deleteUser: async (userId: string): Promise<boolean> => {
-     return new Promise((resolve) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         const email = Object.keys(MOCK_USERS).find(key => MOCK_USERS[key].id === userId);
         if (email) {
-            delete MOCK_USERS[email];
-            resolve(true);
+          delete MOCK_USERS[email];
+          resolve(true);
         } else {
-            resolve(false);
+          resolve(false);
         }
       }, 500);
     });
-  }
+  },
+
+  logout: () => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  },
 };
