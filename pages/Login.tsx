@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
+import { AuthService } from '../authService';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -19,7 +20,7 @@ export const Login: React.FC = () => {
     // Simulate magic link flow
     setTimeout(async () => {
       try {
-        await login(email);
+        await AuthService.sendMagicLink(email)
         setStatus('success');
       } catch (error) {
         setStatus('error');
