@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { AuthService } from '../AuthService';
+import { AuthService } from '../authService';
 
 const VerifyToken: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -20,8 +20,8 @@ const VerifyToken: React.FC = () => {
       }
 
       try {
-        const result = await AuthService.verifyMagicLink(token);
-        
+        const result = await
+        AuthService.verifyMagicLink();
         if (result.success && result.user) {
           // Store user data in localStorage
           localStorage.setItem('user', JSON.stringify(result.user));
