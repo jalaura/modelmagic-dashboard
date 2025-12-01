@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { AuthService } from '..aauthService';
-
+import { AuthService } from '../authService';
 const VerifyToken: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
