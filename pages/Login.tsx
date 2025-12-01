@@ -75,4 +75,33 @@ export const Login: React.FC = () => {
             />
           </div>
 
-       
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full bg-[#1A1A1A] text-white py-3 rounded-md font-bold hover:bg-black transition-colors flex items-center justify-center"
+            >
+              {status === 'sending' ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" /> Sending...
+                </>
+              ) : (
+                <>
+                  Send Magic Link <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-[#E5E7EB] text-center">
+            <p className="text-xs text-[#9CA3AF] mb-4 uppercase tracking-wider font-bold">Demo Accounts</p>
+            <div className="space-y-2 text-sm text-[#6B7280]">
+              <div onClick={() => setEmail('sarah@luxeboutique.com')} className="cursor-pointer hover:text-[#1F6B55]">Click to use: sarah@luxeboutique.com</div>
+              <div onClick={() => setEmail('admin@modelmagic.com')} className="cursor-pointer hover:text-[#1F6B55]">Admin: admin@modelmagic.com</div>
+              <div onClick={() => setEmail('jessica@modelmagic.com')} className="cursor-pointer hover:text-[#1F6B55]">Editor: jessica@modelmagic.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
