@@ -18,6 +18,7 @@ import { Folder, ArrowRight } from 'lucide-react';
 import { ProjectStatus } from './types';
 import { Link } from 'react-router-dom';
 import { Login } from './pages/Login';
+import { VerifyToken } from './pages/VerifyToken';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Simple Projects List Component for the route
@@ -118,6 +119,8 @@ const App: React.FC = () => {
     <AppProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+                                  <Route path="/auth/verify" element={<VerifyToken />} />
+
           
           {/* Protected Routes */}
           <Route path="/*" element={
