@@ -17,15 +17,12 @@ export const Login: React.FC = () => {
 
     setStatus('sending');
     
-    // Simulate magic link flow
-    setTimeout(async () => {
-      try {
-        await AuthService.sendMagicLink(email)
+            try {
+  await AuthService.sendMagicLink(email)
         setStatus('success');
       } catch (error) {
         setStatus('error');
       }
-    }, 1500);
   };
 
   if (status === 'success') {
@@ -38,7 +35,6 @@ export const Login: React.FC = () => {
           <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Magic Link Sent!</h2>
           <p className="text-[#6B7280] mb-8">
             Check your email for the login link. <br/>
-            (Simulation: You are logged in)
           </p>
           <button 
             onClick={() => navigate('/')}
