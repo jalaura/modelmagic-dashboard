@@ -85,3 +85,9 @@ export const Login: React.FC = () => {
                   Send Magic Link <ArrowRight size={18} />
                 </>
               )}
+                      </button>
+      </form>
+    </div>
+  </div>
+};
+};
