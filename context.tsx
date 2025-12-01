@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Project, Asset, User, Notification, TeamMember, Message, UserRole } from './types';
-import { MOCK_PROJECTS, MOCK_ASSETS, MOCK_NOTIFICATIONS, TEAM_MEMBERS, MOCK_MESSAGES } from './mockData';
 import { AuthService } from './authService';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,11 +33,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const navigate = useNavigate();
   
   // Data states
-  const [projects, setProjects] = useState<Project[]>(MOCK_PROJECTS);
-  const [assets, setAssets] = useState<Asset[]>(MOCK_ASSETS);
-  const [notifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
-  const [teamMembers] = useState<TeamMember[]>(TEAM_MEMBERS);
-  const [messages] = useState<Message[]>(MOCK_MESSAGES);
+  const [projects, setProjects] = useState<Project[]>([]);  const [assets, setAssets] = useState<Asset[]>([]);
+  const [notifications] = useState<Notification[]>([]);
+  const [teamMembers] = useState<TeamMember[]>([]);
+  const [messages] = useState<Message[]>([]);
   
   const [userRole, setUserRole] = useState<UserRole>('client');
 
