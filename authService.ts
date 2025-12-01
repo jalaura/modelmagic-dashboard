@@ -13,11 +13,9 @@ const MOCK_USERS: Record<string, User> = {
     status: 'active',
     lastLogin: '2024-05-12T10:00:00Z'
   },
-  'admin@modelmagic.com': {
-    id: 'admin1',
+  'admin@modelsmagix.com': {    id: 'admin1',
     name: 'Admin User',
-    email: 'admin@modelmagic.com',
-    company: 'ModelMagic HQ',
+    email: 'admin@modelsmagix.com',    company: 'ModelMagic HQ',
     avatar: 'https://ui-avatars.com/api/?name=Admin+User&background=1F6B55&color=fff',
     plan: 'Admin',
     role: 'admin',
