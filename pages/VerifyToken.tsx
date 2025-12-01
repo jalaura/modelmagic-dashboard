@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { AuthService } from '../authService';
+import { AuthService } from '..aauthService';
 
 const VerifyToken: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -20,19 +20,17 @@ const VerifyToken: React.FC = () => {
       }
 
       try {
-        const result = await
-        AuthService.verifyMagicLink();
-        if (result.success && result.user) {
-          // Store user data in localStorage
-          localStorage.setItem('user', JSON.stringify(result.user));
-          localStorage.setItem('token', result.token);
-          
+        const user = await
+        AuthService.verifyMa();
+      if (user) {          // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);          
           setStatus('success');
           
           // Redirect based on user role
           setTimeout(() => {
-            if (result.user.role === 'admin') {
-              navigate('/admin');
+        if (user.role === 'admin') {
+                    navigate('/admin');
             } else {
               navigate('/dashboard');
             }
