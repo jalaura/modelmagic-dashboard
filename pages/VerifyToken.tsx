@@ -20,7 +20,7 @@ const VerifyToken: React.FC = () => {
 
       try {
         const user = await
-        AuthService.verifyMa();
+        AuthService.verifyMagicLink();
       if (user) {          // Store user data in localStorage
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('token', token);          
