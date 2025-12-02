@@ -99,4 +99,36 @@ export const AuthService = {
 
     return response.json();
   },
+
+    getAllUsers: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/team-members`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch users');
+    }
+
+    return response.json();
+  },
+
+  deleteUser: async (userId: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to delete user');
+    }
+
+    return response.json();
+  },
 };
