@@ -63,6 +63,51 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     checkAuth();
   }, []);
 
+  // Fetch data from API when user is authenticated
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isAuthenticated || !user) return;
+
+      try {
+        setIsLoading(true);
+
+        // Fetch projects
+        const projectsRes = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/projects');
+        if (projectsRes.ok) {
+          const projectsData = await projectsRes.json();
+          if (projectsData.success) {
+            setProjects(projectsData.projects || []);
+          }
+        }
+
+        // Fetch assets
+        const assetsRes = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/assets');
+        if (assetsRes.ok) {
+          const assetsData = await assetsRes.json();
+          if (assetsData.success) {
+            setAssets(assetsData.assets || []);
+          }
+        }
+
+        // Fetch team members
+        const teamRes = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/team-members');
+        if (teamRes.ok) {
+          const teamData = await teamRes.json();
+          if (teamData.success) {
+            // Update team members state if we had a setter
+            console.log('Team members:', teamData.team_members);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [isAuthenticated, user]);
+
   const login = async (email: string) => {
     try {
       const user = await AuthService.verifyMagicLink(email);
