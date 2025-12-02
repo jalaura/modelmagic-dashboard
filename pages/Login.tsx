@@ -89,5 +89,7 @@ export const Login: React.FC = () => {
       </form>
     </div>
   </div>
+      );
+  };
 };
 };
