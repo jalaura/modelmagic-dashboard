@@ -1,20 +1,67 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ModelMagic Dashboard
 
-# Run and deploy your AI Studio app
+A comprehensive client and admin dashboard for ModelMagic - a done-for-you product photography service. Features magic link authentication, role-based access control, and complete project management capabilities.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1OLX5hzyGwV3JHndSo8aPPXDYpm2VGAFj
+- **Magic Link Authentication** - Secure, passwordless login via email
+- **Role-Based Access** - Separate client and admin interfaces
+- **Project Management** - Track photography projects from submission to delivery
+- **File Upload & Management** - Handle project assets and deliverables
+- **Real-time Updates** - Live project status tracking
+- **Responsive Design** - Works seamlessly on desktop and mobile
 
-## Run Locally
+## Tech Stack
 
-**Prerequisites:**  Node.js
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS
+- **Routing**: React Router v6
+- **State Management**: React Context API
+- **Deployment**: Cloudflare Pages
+- **Authentication**: Resend (magic link email service)
+- **Backend**: Cloudflare Workers
 
+## Local Development
+
+### Prerequisites
+
+- Node.js 18+ installed
+- npm or yarn package manager
+
+### Setup
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   ```bash
+   npm install
+   ```
+
+2. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+3. Open http://localhost:5173 in your browser
+
+## Deployment
+
+This project is configured for deployment on Cloudflare Pages with automatic builds from the main branch.
+
+## Project Structure
+
+```
+├── components/          # Reusable React components
+├── pages/              # Page components (Dashboard, Login, etc.)
+├── public/             # Static assets
+├── types.ts            # TypeScript type definitions
+├── context.tsx         # Global app context and state management
+├── authService.ts      # Authentication service
+├── index.html          # Entry HTML file
+```
+
+## Authentication
+
+The dashboard uses magic link authentication powered by Resend. Users receive a secure login link via email, eliminating the need for passwords.
+
+## License
+
+Private - All rights reserved
