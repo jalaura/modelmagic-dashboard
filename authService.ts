@@ -101,7 +101,7 @@ export const AuthService = {
   },
 
     getAllUsers: async () => {
-    const response = await fetch(`${API_BASE_URL}/api/team-members`, {
+    const response = await fetch(`${API_BASE_URL}/api/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
