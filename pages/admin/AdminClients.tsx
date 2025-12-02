@@ -24,18 +24,40 @@ export const AdminClients: React.FC = () => {
   }, []);
 
   const handleAddUser = async (userData: any) => {
-    await AuthService.addUser(userData);
-    setIsAddModalOpen(false);
-    fetchUsers();
-  };
-
-  const handleDeleteUser = async (userId: string) => {
-    if (confirm('Are you sure you want to delete this user?')) {
-        await AuthService.deleteUser(userId);
-        fetchUsers();
+    setIsSubmitting(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    try {
+      await AuthService.addUser(userData);
+      setSuccessMessage('User added successfully!');
+      setIsAddModalOpen(false);
+      fetchUsers();
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Error adding user:', error);
+      setErrorMessage('Failed to add user. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
+  const handleDeleteUser = async (userId: string) => {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    
+    setIsSubmitting(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    try {
+      await AuthService.deleteUser(userId);
+      setSuccessMessage('User deleted successfully!');
+      fetchUsers();
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      setErrorMessage('Failed to delete user. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const filteredUsers = users.filter(u => 
     u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     u.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,6 +83,20 @@ export const AdminClients: React.FC = () => {
             onClick={() => setIsAddModalOpen(true)}
             className="flex items-center gap-2 px-6 py-3 bg-[#1F6B55] hover:bg-[#164f3f] text-white rounded-md font-bold text-sm shadow-sm transition-all"
         >
+
+                {/* Success/Error Messages */}
+      {successMessage && (
+        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md flex items-center gap-2 text-green-700">
+          <span className="text-green-600">✓</span>
+          {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-red-700">
+          <span className="text-red-600">⚠</span>
+          {errorMessage}
+        </div>
+      )}
             <Plus size={18} /> Add New User
         </button>
       </div>
@@ -143,7 +179,10 @@ export const AdminClients: React.FC = () => {
         <AddUserModal 
             isOpen={isAddModalOpen} 
             onClose={() => setIsAddModalOpen(false)} 
-            onSubmit={handleAddUser} 
+            onSubmit={handleAddUser}
+                    isSubmitting={isSubmitting}
+          errorMessage={errorMessage}
+          successMessage={successMessage}
         />
       )}
     </div>
