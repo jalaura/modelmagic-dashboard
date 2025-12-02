@@ -76,4 +76,27 @@ export const AuthService = {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   },
+
+    addUser: async (userData: {
+    email: string;
+    name: string;
+    role: string;
+    company?: string;
+    sendInvite: boolean;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/api/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to add user');
+    }
+
+    return response.json();
+  },
 };
