@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DollarSign, Clock, CheckCircle, TrendingUp } from 'lucide-react';
 
-const StatCard: React.FC<{ title: string; value: string; icon: any; color: string }> = ({ title, value, icon: Icon, color }) =>
+const StatCard: React.FC<{ title: string; value: string; icon: any; color: string }> = ({ title, value, icon: Icon, color }) =
   <div className="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm">
     <div className="flex justify-between items-start mb-4">
       <div>
