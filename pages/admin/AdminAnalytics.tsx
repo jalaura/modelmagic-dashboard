@@ -50,7 +50,7 @@ export const AdminAnalytics: React.FC = () => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/analytics/metrics');
+        const response = await fetch('https://api.modelsmagix.com/api/analytics/metrics');
         
         if (!response.ok) {
           throw new Error(`API returned ${response.status}: ${response.statusText}`);
