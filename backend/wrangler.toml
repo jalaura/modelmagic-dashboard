@@ -1,0 +1,14 @@
+name = "modelmagic-backend"
+compatibility_date = "2023-12-01"
+
+[vars]
+# Environment variables will be set here
+
+[[d1_databases]]
+binding = "DB"
+database_name = "modelmagic-db"
+database_id = "modelmagic-db-id" # Placeholder, needs to be replaced with actual ID
+
+[[kv_namespaces]]
+binding = "SESSION_KV"
+id = "session-kv-id" # Placeholder, needs to be replaced with actual ID

@@ -70,9 +70,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
       try {
         setIsLoading(true);
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787';
 
         // Fetch projects
-        const projectsRes = await fetch('https://api.modelsmagix.com/api/projects');
+        const projectsRes = await fetch(`${API_BASE_URL}/api/projects`);
         if (projectsRes.ok) {
           const projectsData = await projectsRes.json();
           if (projectsData.success) {
@@ -81,7 +82,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         }
 
         // Fetch assets
-        const assetsRes = await fetch('https://api.modelsmagix.com/api/assets');
+        const assetsRes = await fetch(`${API_BASE_URL}/api/assets`);
         if (assetsRes.ok) {
           const assetsData = await assetsRes.json();
           if (assetsData.success) {
@@ -89,15 +90,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           }
         }
 
-        // Fetch team members
-        const teamRes = await fetch('https://api.modelsmagix.com/api/team-members');
-        if (teamRes.ok) {
-          const teamData = await teamRes.json();
-          if (teamData.success) {
-            // Update team members state if we had a setter
-            console.log('Team members:', teamData.team_members);
-          }
-        }
+        // Fetch team members (Mock for now as endpoint not fully implemented)
+        // const teamRes = await fetch(`${API_BASE_URL}/api/team-members`);
+        // if (teamRes.ok) {
+        //   const teamData = await teamRes.json();
+        //   if (teamData.success) {
+        //     // Update team members state if we had a setter
+        //     console.log('Team members:', teamData.team_members);
+        //   }
+        // }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -144,20 +145,63 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
-  const addProject = (project: Project) => {
-    setProjects(prev => [project, ...prev]);
+  const addProject = async (project: Project) => {
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787';
+      const response = await fetch(`${API_BASE_URL}/api/projects`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(project),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setProjects(prev => [data.project, ...prev]);
+        }
+      }
+    } catch (error) {
+      console.error('Error adding project:', error);
+      // Optimistic update fallback or error handling
+    }
   };
 
-  const updateAssetStatus = (assetId: string, status: 'approved' | 'revision') => {
-    setAssets(prev => prev.map(a => a.id === assetId ? { ...a, status } : a));
+  const updateAssetStatus = async (assetId: string, status: 'approved' | 'revision') => {
+    try {
+      // Optimistic update
+      setAssets(prev => prev.map(a => a.id === assetId ? { ...a, status } : a));
+
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787';
+      await fetch(`${API_BASE_URL}/api/assets/${assetId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+    } catch (error) {
+      console.error('Error updating asset status:', error);
+      // Revert optimistic update if needed
+    }
   };
 
   const getProjectAssets = (projectId: string) => {
     return assets.filter(a => a.projectId === projectId);
   };
 
-  const updateProject = (projectId: string, updates: Partial<Project>) => {
-    setProjects(prev => prev.map(p => p.id === projectId ? { ...p, ...updates } : p));
+  const updateProject = async (projectId: string, updates: Partial<Project>) => {
+    try {
+      // Optimistic update
+      setProjects(prev => prev.map(p => p.id === projectId ? { ...p, ...updates } : p));
+
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787';
+      await fetch(`${API_BASE_URL}/api/projects/${projectId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+    } catch (error) {
+      console.error('Error updating project:', error);
+      // Revert optimistic update if needed
+    }
   };
 
   return (

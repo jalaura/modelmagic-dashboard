@@ -1,25 +1,36 @@
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import { Dashboard } from './pages/Dashboard';
-import { NewProject } from './pages/NewProject';
-import { ProjectDetail } from './pages/ProjectDetail';
-import { AssetsPage } from './pages/Assets';
-import { TeamPage } from './pages/Team';
-import HelpPage from './pages/Help';
-import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminProjectDetail } from './pages/admin/AdminProjectDetail';
-import { AdminTeam } from './pages/admin/AdminTeam';
-import { AdminAnalytics } from './pages/admin/AdminAnalytics';
-import { AdminClients } from './pages/admin/AdminClients';
 import { AppProvider, useApp } from './context';
 import { Folder, ArrowRight } from 'lucide-react';
 import { ProjectStatus } from './types';
 import { Link } from 'react-router-dom';
-import { Login } from './pages/Login';
-import VerifyToken from './pages/VerifyToken';
 import { ProtectedRoute } from './components/ProtectedRoute';
+
+// Lazy load pages
+const Dashboard = lazy(() => import('./pages/Dashboard').then(module => ({ default: module.Dashboard })));
+const NewProject = lazy(() => import('./pages/NewProject').then(module => ({ default: module.NewProject })));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail').then(module => ({ default: module.ProjectDetail })));
+const AssetsPage = lazy(() => import('./pages/Assets').then(module => ({ default: module.AssetsPage })));
+const TeamPage = lazy(() => import('./pages/Team').then(module => ({ default: module.TeamPage })));
+const HelpPage = lazy(() => import('./pages/Help'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard').then(module => ({ default: module.AdminDashboard })));
+const AdminProjectDetail = lazy(() => import('./pages/admin/AdminProjectDetail').then(module => ({ default: module.AdminProjectDetail })));
+const AdminTeam = lazy(() => import('./pages/admin/AdminTeam').then(module => ({ default: module.AdminTeam })));
+const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics').then(module => ({ default: module.AdminAnalytics })));
+const AdminClients = lazy(() => import('./pages/admin/AdminClients').then(module => ({ default: module.AdminClients })));
+const Login = lazy(() => import('./pages/Login').then(module => ({ default: module.Login })));
+const VerifyToken = lazy(() => import('./pages/VerifyToken'));
+const BillingPage = lazy(() => import('./pages/Billing').then(module => ({ default: module.BillingPage })));
+
+// Loading component
+const PageLoader = () => (
+  <div className="flex items-center justify-center h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1F6B55]"></div>
+  </div>
+);
+
 // Simple Projects List Component for the route
 const ProjectsList: React.FC = () => {
     const { projects } = useApp();
@@ -116,45 +127,49 @@ const HomeRoute: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AppProvider>
+      <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-                                  <Route path="/auth/verify" element={<VerifyToken />} />
+          <Route path="/auth/verify" element={<VerifyToken />} />
 
           
           {/* Protected Routes */}
           <Route path="/*" element={
             <ProtectedRoute>
               <Layout>
-                <Routes>
-                  {/* Root Route logic */}
-                  <Route path="/" element={<HomeRoute />} />
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    {/* Root Route logic */}
+                    <Route path="/" element={<HomeRoute />} />
 
-                  {/* Client Routes */}
-                  <Route path="/dashboard" element={
-                    // Protect Client Dashboard from being accessed directly by Admin mode unless switching
-                    <Dashboard />
-                  } />
-                  <Route path="/projects" element={<ProjectsList />} />
-                  <Route path="/projects/new" element={<NewProject />} />
-                  <Route path="/projects/:id" element={<ProjectDetail />} />
-                  <Route path="/assets" element={<AssetsPage />} />
-                  <Route path="/team" element={<TeamPage />} />
-                  <Route path="/billing" element={<PlaceholderPage title="Billing & Plans" />} />
-                  <Route path="/help" element={<HelpPage />} />
-                  
-                  {/* Admin Routes */}
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/admin/projects/:id" element={<AdminProjectDetail />} />
-                  <Route path="/admin/team" element={<AdminTeam />} />
-                  <Route path="/admin/analytics" element={<AdminAnalytics />} />
-                  <Route path="/admin/clients" element={<AdminClients />} />
+                    {/* Client Routes */}
+                    <Route path="/dashboard" element={
+                      // Protect Client Dashboard from being accessed directly by Admin mode unless switching
+                      <Dashboard />
+                    } />
+                    <Route path="/projects" element={<ProjectsList />} />
+                    <Route path="/projects/new" element={<NewProject />} />
+                    <Route path="/projects/:id" element={<ProjectDetail />} />
+                    <Route path="/assets" element={<AssetsPage />} />
+                    <Route path="/team" element={<TeamPage />} />
+                    <Route path="/billing" element={<BillingPage />} />
+                    <Route path="/help" element={<HelpPage />} />
+                    
+                    {/* Admin Routes */}
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/projects/:id" element={<AdminProjectDetail />} />
+                    <Route path="/admin/team" element={<AdminTeam />} />
+                    <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                    <Route path="/admin/clients" element={<AdminClients />} />
 
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Suspense>
               </Layout>
             </ProtectedRoute>
           } />
         </Routes>
+      </Suspense>
     </AppProvider>
   );
 };

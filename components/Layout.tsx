@@ -81,15 +81,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       )}
 
       {/* Sidebar */}
-      <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-[#E5E7EB] 
-        transform transition-transform duration-300 ease-out shadow-sm
-        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+      <aside
+        className={`
+          fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-[#E5E7EB]
+          transform transition-transform duration-300 ease-out shadow-sm
+          ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+        aria-label="Sidebar Navigation"
+      >
         <div className="h-full flex flex-col">
           {/* Logo */}
           <div className="h-24 flex items-center px-8">
-            <Link to={isAdminView ? "/admin" : "/dashboard"} className="flex items-center gap-3 group">
+            <Link to={isAdminView ? "/admin" : "/dashboard"} className="flex items-center gap-3 group" aria-label="Go to Dashboard">
               <div className="w-8 h-8 bg-[#1F6B55] rounded-md flex items-center justify-center shadow-sm group-hover:bg-[#164f3f] transition-colors">
                 <span className="text-white text-lg font-bold">M</span>
               </div>
@@ -100,9 +103,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 Admin
               </span>
             )}
-            <button 
+            <button
               className="ml-auto lg:hidden text-[#9CA3AF]"
               onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close Menu"
             >
               <X size={24} />
             </button>
@@ -112,9 +116,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="flex-1 overflow-y-auto py-6">
             {!isAdminView && (
               <div className="px-6 mb-8">
-                <Link 
-                  to="/projects/new" 
+                <Link
+                  to="/projects/new"
                   className="w-full flex items-center justify-center gap-2 bg-[#1F6B55] hover:bg-[#164f3f] text-white py-3 rounded-md font-medium transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                  aria-label="Submit New Project"
                 >
                   <Plus size={18} />
                   Submit Project
@@ -122,7 +127,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               </div>
             )}
 
-            <nav className="space-y-1">
+            <nav className="space-y-1" aria-label="Main Navigation">
               {isAdminView ? (
                 <>
                   <SidebarItem 
@@ -232,24 +237,29 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         {/* Top Header */}
         <header className={`h-20 flex items-center justify-between px-8 lg:px-12 sticky top-0 z-30 backdrop-blur-md border-b border-[#E5E7EB]/50 ${isAdminView ? 'bg-[#1F6B55]/5' : 'bg-[#F5F3F0]/90'}`}>
           <div className="flex items-center gap-4">
-            <button 
+            <button
               className="lg:hidden text-[#6B7280] hover:text-[#1A1A1A]"
               onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open Menu"
             >
               <Menu size={24} />
             </button>
             <div className="relative hidden md:block w-96 group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] group-focus-within:text-[#1F6B55] transition-colors" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search projects, assets..." 
+              <input
+                type="text"
+                placeholder="Search projects, assets..."
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[#E5E7EB] bg-white focus:outline-none focus:ring-2 focus:ring-[#1F6B55]/20 focus:border-[#1F6B55] transition-all text-sm shadow-sm"
+                aria-label="Search"
               />
             </div>
           </div>
 
           <div className="flex items-center gap-6">
-            <button className="relative p-2 text-[#6B7280] hover:text-[#1F6B55] transition-colors">
+            <button
+              className="relative p-2 text-[#6B7280] hover:text-[#1F6B55] transition-colors"
+              aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
+            >
               <Bell size={22} />
               {unreadCount > 0 && (
                 <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#EF4444] rounded-full ring-2 ring-[#F5F3F0]"></span>
@@ -262,6 +272,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <button
                   onClick={() => setRoleSwitcherOpen(!roleSwitcherOpen)}
                   className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors shadow-sm"
+                  aria-label="Switch Role"
+                  aria-expanded={roleSwitcherOpen}
                 >
                   <span>{userRole === 'client' ? '👤 Client View' : '🔧 Admin View'}</span>
                   <ChevronDown size={16} />
