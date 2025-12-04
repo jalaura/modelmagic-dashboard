@@ -72,7 +72,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setIsLoading(true);
 
         // Fetch projects
-        const projectsRes = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/projects');
+        const projectsRes = await fetch('https://api.modelsmagix.com/api/projects');
         if (projectsRes.ok) {
           const projectsData = await projectsRes.json();
           if (projectsData.success) {
@@ -81,7 +81,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         }
 
         // Fetch assets
-        const assetsRes = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/assets');
+        const assetsRes = await fetch('https://api.modelsmagix.com/api/assets');
         if (assetsRes.ok) {
           const assetsData = await assetsRes.json();
           if (assetsData.success) {
@@ -90,7 +90,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         }
 
         // Fetch team members
-        const teamRes = await fetch('https://modelmagic-api.cmsdossier.workers.dev/api/team-members');
+        const teamRes = await fetch('https://api.modelsmagix.com/api/team-members');
         if (teamRes.ok) {
           const teamData = await teamRes.json();
           if (teamData.success) {
