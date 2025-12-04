@@ -2,12 +2,12 @@ import { User, UserRole } from './types';
 
 const TOKEN_KEY = 'modelmagic_auth_token';
 const USER_KEY = 'modelmagic_user_data';
-const API_BASE_URL = 'https://api.modelsmagix.com';
+const API_BASE_URL = 'https://modelmagic-api.cmsdossier.workers.dev';
 
 export const AuthService = {
   sendMagicLink: async (email: string): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/request-magic-link`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
